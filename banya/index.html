@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="robots" content="noindex, nofollow">
   <title>Баня «У Михалыча» — общественная баня на дровах в Павловском Посаде</title>
   <meta name="description" content="Русская парная на дровах, бассейн, массаж и бар. Расписание мужских и женских дней, цены, организованный пар, подарочные сертификаты. Павловский Посад, Корнево-Юдинский пер., 10.">
@@ -33,7 +33,8 @@
 }
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); }
+html { scroll-behavior: smooth; scroll-padding-top: var(--header-h); -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+a, button { -webkit-tap-highlight-color: transparent; }
 body {
   font-family: 'Manrope', system-ui, sans-serif;
   color: var(--ink);
@@ -61,18 +62,18 @@ em { font-style: normal; font-weight: inherit; }
 .btn:hover svg { transform: translateX(3px); }
 .btn-ember { background: linear-gradient(135deg, var(--ember), var(--ember-2)); color: #fff; box-shadow: 0 10px 30px -10px rgba(226, 105, 47, .7); }
 .btn-ember:hover { box-shadow: 0 16px 40px -10px rgba(226, 105, 47, .85); }
-.btn-glass { background: rgba(255, 255, 255, .1); color: var(--cream); border: 1px solid rgba(255, 255, 255, .25); backdrop-filter: blur(10px); }
-.btn-glass:hover { background: rgba(255, 255, 255, .18); }
+.btn-glass { background: transparent; color: var(--cream); border: 1.5px solid rgba(255, 255, 255, .45); }
+.btn-glass:hover { background: rgba(255, 255, 255, .08); }
 .btn-dark { background: var(--coal); color: var(--cream); }
 .btn-sm { min-height: 44px; padding: 0 20px; font-size: 14px; }
 
 /* ===== Шапка ===== */
 .header {
-  position: fixed; inset: 0 0 auto; z-index: 50; height: var(--header-h);
+  position: fixed; inset: 0 0 auto; z-index: 50; height: calc(var(--header-h) + env(safe-area-inset-top)); padding-top: env(safe-area-inset-top);
   display: flex; align-items: center; color: var(--cream);
   transition: background .4s, backdrop-filter .4s, box-shadow .4s;
 }
-.header.scrolled { background: rgba(18, 13, 10, .78); backdrop-filter: blur(16px) saturate(1.4); box-shadow: 0 1px 0 var(--line-light); }
+.header.scrolled { background: rgba(18, 13, 10, .78); -webkit-backdrop-filter: blur(16px) saturate(1.4); backdrop-filter: blur(16px) saturate(1.4); box-shadow: 0 1px 0 var(--line-light); }
 .header-row { display: flex; align-items: center; gap: 28px; }
 .logo { display: flex; align-items: center; gap: 12px; margin-right: auto; }
 .logo-mark { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center; background: linear-gradient(135deg, var(--ember), var(--ember-2)); color: #fff; }
@@ -95,7 +96,7 @@ em { font-style: normal; font-weight: inherit; }
 
 /* ===== Первый экран ===== */
 .hero {
-  position: relative; min-height: 100svh; display: flex; align-items: flex-end;
+  position: relative; min-height: 100vh; min-height: 100svh; display: flex; align-items: flex-end;
   color: var(--cream); background: var(--coal); overflow: hidden; isolation: isolate;
 }
 .hero-media { position: absolute; inset: 0; z-index: -3; }
@@ -115,7 +116,7 @@ em { font-style: normal; font-weight: inherit; }
 
 .today-pill {
   display: inline-flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 999px;
-  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .2); backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, .1); border: 1px solid rgba(255, 255, 255, .2); -webkit-backdrop-filter: blur(12px); backdrop-filter: blur(12px);
   font-size: 14px; font-weight: 600; margin-bottom: 26px;
 }
 .dot { width: 9px; height: 9px; border-radius: 50%; background: #5bd67a; box-shadow: 0 0 0 0 rgba(91, 214, 122, .7); animation: pulse 2s infinite; }
@@ -191,8 +192,8 @@ h2 em { color: var(--ember); }
 .now-ring .track { stroke: rgba(255, 255, 255, .12); }
 .now-ring .bar { stroke: url(#g) var(--ember-2); stroke: var(--ember-2); stroke-linecap: round; stroke-dasharray: 327; stroke-dashoffset: 327; transition: stroke-dashoffset 1.6s var(--ease); }
 .now-ring-text { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
-.now-ring-text b { font-size: 24px; font-weight: 800; letter-spacing: -.02em; }
-.now-ring-text span { font-size: 12px; opacity: .65; }
+.now-ring-text b { font-size: 22px; font-weight: 800; letter-spacing: -.02em; line-height: 1.08; }
+.now-ring-text span { font-size: 12px; opacity: .65; margin-top: 4px; }
 
 .week { display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px; }
 .day {
@@ -291,7 +292,7 @@ h2 em { color: var(--ember); }
 .cart-bar {
   position: sticky; bottom: 20px; margin-top: 26px; z-index: 5;
   display: flex; align-items: center; justify-content: space-between; gap: 20px;
-  padding: 14px 14px 14px 28px; border-radius: 999px; background: rgba(18, 13, 10, .9); color: var(--cream); backdrop-filter: blur(14px);
+  padding: 14px 14px 14px 28px; border-radius: 999px; background: rgba(18, 13, 10, .9); color: var(--cream); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
   transform: translateY(30px); opacity: 0; pointer-events: none; transition: transform .5s var(--ease), opacity .5s;
 }
 .cart-bar.show { transform: none; opacity: 1; pointer-events: auto; }
@@ -357,6 +358,7 @@ h2 em { color: var(--ember); }
 .map { border-radius: 28px; overflow: hidden; min-height: 460px; background: var(--coal-2); position: relative; }
 /* iframe выше контейнера: рекламные карточки виджета уходят за нижний край */
 .map iframe { position: absolute; inset: 0 0 auto; width: 100%; height: calc(100% + 132px); border: 0; filter: sepia(.15) saturate(.9); }
+.map-static { display: none; }
 
 /* ===== Подвал ===== */
 .footer { background: var(--coal); color: rgba(244, 235, 224, .7); padding: 40px 0 44px; }
@@ -371,14 +373,14 @@ h2 em { color: var(--ember); }
   .nav { display: none; }
   .burger { display: block; }
   .nav-open .nav {
-    display: flex; position: fixed; inset: var(--header-h) 0 auto; flex-direction: column; gap: 0;
-    background: rgba(18, 13, 10, .97); backdrop-filter: blur(16px); padding: 10px 24px 26px; font-size: 20px;
+    display: flex; position: fixed; inset: calc(var(--header-h) + env(safe-area-inset-top)) 0 auto; flex-direction: column; gap: 0;
+    background: rgba(18, 13, 10, .97); -webkit-backdrop-filter: blur(16px); backdrop-filter: blur(16px); padding: 10px 24px 26px; font-size: 20px;
   }
   .nav-open .nav a { padding: 14px 0; border-bottom: 1px solid var(--line-light); opacity: 1; }
   .nav-open .nav a::after { display: none; }
   .nav-open .header { background: rgba(18, 13, 10, .97); }
   .week { grid-template-columns: repeat(4, 1fr); }
-  .steam-grid, .gift-grid, .reviews-grid { grid-template-columns: 1fr; gap: 46px; }
+  .steam-grid, .gift-grid, .reviews-grid, .contacts-grid { grid-template-columns: 1fr; gap: 46px; }
   .bento { grid-template-columns: repeat(2, 1fr); grid-auto-rows: 230px; }
   .price-grid { grid-template-columns: 1fr 1fr; }
   .price-card-calc { grid-column: span 2; }
@@ -397,7 +399,7 @@ h2 em { color: var(--ember); }
   .marquee span { font-size: 15px; }
   .now-card { flex-direction: column; align-items: flex-start; padding: 28px 24px; }
   .now-card { gap: 20px; }
-  .now-ring { width: 116px; height: 116px; align-self: flex-start; }
+  .now-ring { width: 128px; height: 128px; align-self: flex-start; }
   .now-ring-text b { font-size: 20px; }
   .week { grid-template-columns: 1fr; gap: 8px; }
   .day { min-height: 0; flex-direction: row; align-items: center; padding: 16px 18px; gap: 14px; }
@@ -408,14 +410,19 @@ h2 em { color: var(--ember); }
   .day-type .d-w { display: none; }
   .day-time { white-space: nowrap; }
   .tl-item { grid-template-columns: 1fr; gap: 12px; padding: 22px; }
-  .bento { grid-template-columns: 1fr; grid-auto-rows: 240px; }
-  .tile-xl, .tile-feature { grid-column: auto; grid-row: auto; }
-  .tile-xl { height: 340px; }
-  .tile-feature { grid-template-columns: 1fr; height: auto; }
-  .feat { flex-direction: row; align-items: center; flex-wrap: wrap; gap: 4px 14px; padding: 20px; }
-  .feat svg { margin: 0; }
-  .feat b { margin: 0; }
-  .feat span { width: 100%; padding-left: 48px; margin-top: -6px; }
+  /* высота от ширины: карточки не наезжают друг на друга ни на одном телефоне */
+  .bento { grid-template-columns: 1fr 1fr; grid-auto-rows: auto; gap: 10px; }
+  .tile { aspect-ratio: 1 / 1.15; border-radius: 18px; }
+  .tile img { position: absolute; inset: 0; }
+  .tile-xl { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 4 / 3.6; }
+  .tile figcaption { padding: 40px 14px 12px; }
+  .tile figcaption b { font-size: 15px; line-height: 1.2; }
+  .tile-xl figcaption b { font-size: 22px; }
+  .tile figcaption span { font-size: 12px; line-height: 1.3; }
+  .tile-feature { grid-column: 1 / -1; aspect-ratio: auto; height: auto; grid-template-columns: 1fr; }
+  .feat { display: grid; grid-template-columns: 34px 1fr; column-gap: 14px; row-gap: 2px; align-items: center; padding: 18px 20px; }
+  .feat svg { grid-row: span 2; margin: 0; }
+  .feat b { margin: 0; font-size: 17px; }
   .price-grid { grid-template-columns: 1fr; }
   .price-card-calc { grid-column: auto; }
   .price b { font-size: 64px; }
@@ -424,7 +431,7 @@ h2 em { color: var(--ember); }
   .item-ico { width: 46px; height: 46px; }
   .item b { font-size: 15px; }
   .item-row { flex-direction: column; align-items: flex-start; gap: 10px; }
-  .cart-bar { bottom: 84px; border-radius: 22px; padding: 12px 12px 12px 18px; }
+  .cart-bar { bottom: calc(84px + env(safe-area-inset-bottom)); border-radius: 22px; padding: 12px 12px 12px 18px; }
   .cart-bar .btn { padding: 0 16px; min-height: 46px; font-size: 14px; }
   .cart-bar div { flex-direction: column; gap: 0; }
   .gift-card { padding: 22px; aspect-ratio: auto; grid-template-rows: auto auto auto auto; gap: 14px; }
@@ -432,11 +439,19 @@ h2 em { color: var(--ember); }
   .gc-amount { position: static; transform: none; }
   .bar-row { grid-template-columns: 96px 1fr 44px; gap: 12px; font-size: 14px; }
   .contact-list li { grid-template-columns: 1fr; gap: 2px; }
-  .map { min-height: 380px; }
-  .footer { padding-bottom: 110px; }
+  .map { min-height: 0; border-radius: 22px; }
+  .map iframe { display: none; }
+  .map-static { display: block; position: relative; }
+  .map-static img { width: 100%; aspect-ratio: 650 / 450; object-fit: cover; filter: sepia(.12) saturate(.9); }
+  .map-static span {
+    position: absolute; left: 12px; right: 12px; bottom: 12px; min-height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    background: rgba(18, 13, 10, .88); color: var(--cream); font-weight: 700; font-size: 15px;
+  }
+  .footer { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
   .mobile-bar {
-    display: grid; grid-template-columns: repeat(3, 1fr); position: fixed; left: 12px; right: 12px; bottom: 12px; z-index: 40;
-    background: rgba(18, 13, 10, .92); backdrop-filter: blur(14px); border-radius: 20px; padding: 6px; box-shadow: 0 16px 40px -10px rgba(0, 0, 0, .5);
+    display: grid; grid-template-columns: repeat(3, 1fr); position: fixed; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); z-index: 40;
+    background: rgba(18, 13, 10, .92); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); border-radius: 20px; padding: 6px; box-shadow: 0 16px 40px -10px rgba(0, 0, 0, .5);
   }
   .mobile-bar a { display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 9px 0; color: var(--cream); font-size: 12px; font-weight: 700; border-radius: 14px; }
   .mobile-bar a:first-child { background: linear-gradient(135deg, var(--ember), var(--ember-2)); }
@@ -745,6 +760,11 @@ h2 em { color: var(--ember); }
       </div>
       <div class="map reveal" data-delay="2">
         <iframe src="https://yandex.ru/map-widget/v1/?ll=38.698344%2C55.775312&z=16&pt=38.698344%2C55.775312%2Cpm2rdm" loading="lazy" title="Баня «У Михалыча» на карте"></iframe>
+        <!-- на телефоне — лёгкая картинка карты, не перехватывает прокрутку -->
+        <a class="map-static" href="https://yandex.ru/maps/org/u_mikhalycha/1117081248/" target="_blank" rel="noopener">
+          <img src="https://static-maps.yandex.ru/1.x/?ll=38.698344,55.775312&z=16&size=650,450&l=map&pt=38.698344,55.775312,pm2rdl" alt="Баня «У Михалыча» на карте Павловского Посада" loading="lazy">
+          <span>Открыть в Яндекс Картах</span>
+        </a>
       </div>
     </div>
   </section>
@@ -800,7 +820,8 @@ h2 em { color: var(--ember); }
     return { day, min: +p.hour * 60 + +p.minute };
   }
   const hm = h => String(h).padStart(2, '0') + ':00';
-  const dur = m => { const h = Math.floor(m / 60), mm = m % 60; return h ? `${h} ч ${mm} мин` : `${mm} мин`; };
+  // в две строки, чтобы всегда помещалось в кольцо
+  const dur = m => { const h = Math.floor(m / 60), mm = m % 60; return h ? `${h} ч<br>${mm} мин` : `${mm} мин`; };
 
   function status() {
     const { day, min } = moscowNow();
@@ -831,14 +852,14 @@ h2 em { color: var(--ember); }
       pill.textContent = `Сегодня ${TYPE[s.t.type].toLowerCase()} · открыто до ${hm(s.t.to)}`;
       $('#nowTitle').textContent = `Открыто · ${TYPE[s.t.type].toLowerCase()}`;
       $('#nowSub').textContent = `${DAYS[s.day]}, с ${hm(s.t.from)} до ${hm(s.t.to)}`;
-      $('#nowTimer').textContent = dur(s.left);
+      $('#nowTimer').innerHTML = dur(s.left);
       $('#nowTimerLabel').textContent = 'до закрытия';
       if (s.t.type === 'women') card.classList.add('women');
     } else if (s.state === 'soon') {
       pill.textContent = `Сегодня ${TYPE[s.t.type].toLowerCase()} · откроемся в ${hm(s.t.from)}`;
       $('#nowTitle').textContent = `Сегодня — ${TYPE[s.t.type].toLowerCase()}`;
       $('#nowSub').textContent = `Откроемся в ${hm(s.t.from)}, работаем до ${hm(s.t.to)}`;
-      $('#nowTimer').textContent = dur(s.left);
+      $('#nowTimer').innerHTML = dur(s.left);
       $('#nowTimerLabel').textContent = 'до открытия';
       if (s.t.type === 'women') card.classList.add('women');
     } else {
@@ -846,7 +867,7 @@ h2 em { color: var(--ember); }
       pill.textContent = `Сейчас закрыто · ${when.toLowerCase()} — ${TYPE[s.nt.type].toLowerCase()} с ${hm(s.nt.from)}`;
       $('#nowTitle').textContent = SCHEDULE[s.day].type === 'off' ? 'Сегодня санитарный день' : 'Сейчас закрыто';
       $('#nowSub').textContent = `${when} — ${TYPE[s.nt.type].toLowerCase()}, с ${hm(s.nt.from)}`;
-      $('#nowTimer').textContent = dur(s.left);
+      $('#nowTimer').innerHTML = dur(s.left);
       $('#nowTimerLabel').textContent = 'до открытия';
       card.classList.add('closed');
     }
