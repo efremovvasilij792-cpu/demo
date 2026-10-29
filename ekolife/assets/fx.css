@@ -169,3 +169,10 @@
 .foot-back { height: 1.02em; z-index: 0; }
 .foot-meadow { height: .72em; z-index: 2; }
 .foot-row { margin-top: 0; }
+
+/* ---------- «Как работает»: шаги не меняют высоту ----------
+   Раньше описание активного шага раскрывалось, а остальные сворачивались, — блок менял высоту
+   и страница под ним прыгала. Теперь все описания всегда на месте, активный шаг просто ярче. */
+.how-steps p { max-height: none; overflow: visible; opacity: .5; margin-top: 6px; transition: opacity .4s; }
+.how-steps li.active p { max-height: none; opacity: 1; }
+.how-steps li { -webkit-tap-highlight-color: transparent; }

@@ -524,10 +524,18 @@
   }
   if (footLifeCv) addScene(footLifeCv, Life(footLifeCv, { meadow: footMeadow, butterflies: 3, fireflies: 30, home: .6 }));
 
+  // На телефоне при прокрутке прячется адресная строка — меняется только высота окна.
+  // Это не настоящий ресайз: луг и бабочек не пересоздаём, только обновляем координаты.
+  // Пересобираем только ту сцену, чей холст действительно изменил размер (поворот экрана, ресайз окна).
   let rt;
   addEventListener('resize', () => {
+    updateRects();
     clearTimeout(rt);
-    rt = setTimeout(() => scenes.forEach(s => { s.build(); s.draw(performance.now() / 1000, 0); }), 180);
+    rt = setTimeout(() => scenes.forEach(s => {
+      if (Math.abs(s.cv.clientWidth - s.W) < 1 && Math.abs(s.cv.clientHeight - s.H) < 1) return;
+      s.build();
+      s.draw(performance.now() / 1000, 0);
+    }), 180);
   });
 
   requestAnimationFrame(loop);

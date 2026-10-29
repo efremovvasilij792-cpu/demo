@@ -174,7 +174,7 @@ img, iframe { display: block; max-width: 100%; }
 .bub circle { animation-name: rise2; }
 @keyframes rise2 { 0% { transform: translateY(0); opacity: 0; } 15% { opacity: .9; } 100% { transform: translateY(-170px); opacity: 0; } }
 
-.meadow { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: clamp(300px, 44vh, 460px); z-index: 1; pointer-events: none; }
+.meadow { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: clamp(300px, 44svh, 460px); z-index: 1; pointer-events: none; }
 .life { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none; }
 .air { position: fixed; inset: 0; width: 100%; height: 100%; z-index: 40; pointer-events: none; }
 
