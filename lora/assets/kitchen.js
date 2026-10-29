@@ -85,6 +85,13 @@
     return s;
   }
 
+  // Наведение ловит неподвижный прозрачный прямоугольник на месте фасада, а не сам фасад:
+  // иначе открывающаяся дверца уходит из-под курсора, закрывается и снова открывается — дрожит.
+  const slot = (inner, x, y, w, h) =>
+    `<g class="slot">${inner}<rect class="hit" x="${x}" y="${y}" width="${w}" height="${h}"/></g>`;
+  const drawer = (x, y, w, h, id, hd, barY) =>
+    slot(`<g class="drw">${front(x + .2, y, w - .4, h, id)}${hBar(x, barY, w, hd)}</g>`, x + .2, y, w - .4, h);
+
   // распашная дверца поверх содержимого
   function doors(x, y, w, h, id, hd, seed, upper) {
     let s = inside(x + .3, y + .3, w - .6, h - .6, seed, upper);
@@ -92,8 +99,8 @@
     const dw = pair ? (w - .6) / 2 : w - .4;
     const barY = upper ? y + h - (hd === 'black' ? 36 : 17) : y + 4;
     // левая (петли слева)
-    s += `<g class="door">${front(x + .2, y + .2, dw, h - .4, id)}${vBar(x + dw - 3.2, barY, h, hd)}</g>`;
-    if (pair) s += `<g class="door r">${front(x + dw + .4, y + .2, dw, h - .4, id)}${vBar(x + dw + 2.6, barY, h, hd)}</g>`;
+    s += slot(`<g class="door">${front(x + .2, y + .2, dw, h - .4, id)}${vBar(x + dw - 3.2, barY, h, hd)}</g>`, x + .2, y + .2, dw, h - .4);
+    if (pair) s += slot(`<g class="door r">${front(x + dw + .4, y + .2, dw, h - .4, id)}${vBar(x + dw + 2.6, barY, h, hd)}</g>`, x + dw + .4, y + .2, dw, h - .4);
     return s;
   }
 
@@ -104,19 +111,19 @@
       case 'drawers': {
         const hs = [17.6, 24, h - 17.6 - 24 - 1.2];
         let yy = y;
-        hs.forEach(hh => { s += `<g class="drw">${front(x + .2, yy, w - .4, hh, id)}${hBar(x, yy + 3, w, hd)}</g>`; yy += hh + .6; });
+        hs.forEach(hh => { s += drawer(x, yy, w, hh, id, hd, yy + 3); yy += hh + .6; });
         break;
       }
       case 'sink': s += doors(x, y, w, h, id, hd, i, false); break;
       case 'door': s += doors(x, y, w, h, id, hd, i + 2, false); break;
-      case 'dw': s += `<g class="drw">${front(x + .2, y, w - .4, h, id)}${hBar(x, y + 3, w, hd)}</g>`; break;
+      case 'dw': s += drawer(x, y, w, h, id, hd, y + 3); break;
       case 'hob': {
-        s += `<g class="drw">${front(x + .2, y, w - .4, 11.4, id)}${hBar(x, y + 3, w, hd)}</g>`;
+        s += drawer(x, y, w, 11.4, id, hd, y + 3);
         s += `<rect x="${x + .6}" y="${y + 12}" width="${w - 1.2}" height="45" rx="1" fill="#1d1d1f"/>` +
              `<rect x="${x + 4}" y="${y + 19}" width="${w - 8}" height="33" rx="2" fill="#2c2d31"/>` +
              `<rect x="${x + 4}" y="${y + 19}" width="${w - 8}" height="10" rx="2" fill="#fff" opacity=".05"/>` +
              `<rect x="${x + 6}" y="${y + 14.2}" width="${w - 12}" height="1.6" rx=".8" fill="#9b9b9b"/>`;
-        s += `<g class="drw">${front(x + .2, y + 57.6, w - .4, h - 57.6, id)}${hBar(x, y + 60.6, w, hd)}</g>`;
+        s += drawer(x, y + 57.6, w, h - 57.6, id, hd, y + 60.6);
         break;
       }
     }
@@ -135,7 +142,7 @@
 
   function fridge(x, id, hd) {
     const w = 60;
-    let s = `<g class="drw">${front(x + .2, UT + .4, w - .4, 28, id)}${hBar(x, UT + 22, w, hd)}</g>`;
+    let s = drawer(x, UT + .4, w, 28, id, hd, UT + 22);
     s += `<g>${front(x + .2, UT + 29, w - .4, 108, id)}</g>`;
     s += `<g>${front(x + .2, UT + 137.6, w - .4, PL - UT - 138.2, id)}${vBar(x + w - 6, UT + 141, 60, hd)}</g>`;
     if (hd !== 'gola') s += `<rect class="hd" x="${x + w - 6}" y="${UT + 96}" width="1.3" height="${hd === 'black' ? 34 : 14}" rx=".65"/>`;

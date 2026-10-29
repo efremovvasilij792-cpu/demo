@@ -27,7 +27,7 @@
 
   // на телефоне дверцы открываются касанием
   document.addEventListener('click', e => {
-    const d = e.target.closest && e.target.closest('.k .door');
+    const d = e.target.closest && e.target.closest('.k .slot');
     if (d) d.classList.toggle('open');
   });
 
