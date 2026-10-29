@@ -14,6 +14,13 @@
   };
   addEventListener('scroll', onScroll, { passive: true });
   onScroll();
+  // во время прокрутки отключаем реакцию шкафчиков на курсор (класс снимается через 180 мс после остановки)
+  let scrollIdle = 0;
+  addEventListener('scroll', () => {
+    if (!scrollIdle) document.body.classList.add('is-scrolling');
+    clearTimeout(scrollIdle);
+    scrollIdle = setTimeout(() => { scrollIdle = 0; document.body.classList.remove('is-scrolling'); }, 180);
+  }, { passive: true });
   $('#burger').addEventListener('click', () => document.body.classList.toggle('menu-open'));
   $$('#nav a').forEach(a => a.addEventListener('click', () => document.body.classList.remove('menu-open')));
 

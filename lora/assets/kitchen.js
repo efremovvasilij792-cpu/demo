@@ -207,9 +207,6 @@
       }
       if (m.t === 'hob') {
         extra += `<rect x="${x + 3}" y="${CT - 1.2}" width="${m.w - 6}" height="1.2" fill="#161616"/>` +
-          `<g opacity=".9"><path class="steam" d="M${x + m.w * .35} ${CT - 4}q-3-5 0-10t0-10" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>` +
-          `<path class="steam" d="M${x + m.w * .55} ${CT - 4}q3-5 0-10t0-10" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/>` +
-          `<path class="steam" d="M${x + m.w * .72} ${CT - 4}q-3-5 0-10t0-10" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></g>` +
           `<path d="M${x + 8} ${CT - 1.2}h18v-6a3 3 0 0 0-3-3h-12a3 3 0 0 0-3 3z" fill="#3a3c3f"/><rect x="${x + 6}" y="${CT - 11}" width="22" height="1.4" rx=".7" fill="#3a3c3f"/>`;
         if (!o.uppers) extra += `<path d="M${x + m.w / 2 - 6} 20v48h12V20z" fill="#b8b8b6"/><path d="M${x + 4} 92l${m.w / 2 - 10}-24h12l${m.w / 2 - 10} 24z" fill="#c9c9c7"/><rect x="${x + 4}" y="92" width="${m.w - 8}" height="2" fill="#8d8d8b"/>`;
       }

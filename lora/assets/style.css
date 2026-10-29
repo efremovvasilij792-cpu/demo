@@ -64,7 +64,9 @@ h1 em,h2 em{font-style:italic;color:var(--terra)}
   radial-gradient(120% 70% at 70% 0%,#f6efe5 0%,transparent 60%),
   linear-gradient(#ece2d4 0 78%,#d8c7b1 78% 100%)}
 .stage-wall::after{content:"";position:absolute;left:0;right:0;top:78%;bottom:0;background:repeating-linear-gradient(90deg,transparent 0 119px,rgba(80,55,35,.12) 119px 120px)}
-.hero-kitchen{position:absolute;left:5%;right:5%;bottom:14%;top:14%}
+/* кухня — отдельный слой: при прокрутке видеокарта просто сдвигает его, не перерисовывая */
+.hero-kitchen{position:absolute;left:5%;right:5%;bottom:14%;top:14%;will-change:transform;contain:layout paint}
+.cfg-canvas,.sc-pic{will-change:transform;contain:layout paint}
 .hero-kitchen svg{width:100%;height:100%}
 .swatch-float{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);display:flex;gap:8px;padding:8px;border-radius:999px;background:rgba(251,247,241,.88);box-shadow:0 10px 30px -12px rgba(60,40,25,.35)}
 .swatch-float button,.swatches button{width:30px;height:30px;border-radius:50%;background:var(--s);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);transition:transform .25s cubic-bezier(.2,.8,.2,1),box-shadow .25s}
@@ -84,6 +86,8 @@ h1 em,h2 em{font-style:italic;color:var(--terra)}
 .k .seam{fill:none;stroke:rgba(0,0,0,.16);stroke-width:.5}
 /* наведение ловит неподвижный .hit, сами фасады курсор не трогают — без дрожания */
 .k .hit{fill:transparent;pointer-events:all;cursor:pointer}
+/* пока страница листается, шкафчики не реагируют на курсор — иначе их анимация рвёт прокрутку */
+.is-scrolling .k .hit{pointer-events:none}
 .k .door,.k .drw{pointer-events:none}
 .k .door{transform-box:fill-box;transform-origin:left center;transition:transform .7s cubic-bezier(.3,1.3,.5,1)}
 .k .door.r{transform-origin:right center}
@@ -93,9 +97,6 @@ h1 em,h2 em{font-style:italic;color:var(--terra)}
 .k .mod{animation:drop .9s cubic-bezier(.2,1.2,.4,1) both;animation-delay:calc(var(--i)*70ms)}
 .k.noanim .mod{animation:none}
 @keyframes drop{from{opacity:0;transform:translateY(-26px)}to{opacity:1;transform:none}}
-.k .steam{animation:steam 3.6s ease-in-out infinite;opacity:0}
-.k .steam:nth-of-type(2){animation-delay:1.2s}.k .steam:nth-of-type(3){animation-delay:2.4s}
-@keyframes steam{0%{opacity:0;transform:translateY(0) scaleX(1)}30%{opacity:.5}100%{opacity:0;transform:translateY(-22px) scaleX(1.6)}}
 
 /* ---------- ticker ---------- */
 .ticker{overflow:hidden;border-block:1px solid var(--line);padding:18px 0;margin-top:20px}
