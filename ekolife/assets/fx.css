@@ -2,13 +2,75 @@
 
 /* ---------- Плавность: дешёвые слои вместо дорогих эффектов ---------- */
 /* тень рисуется отдельным неподвижным слоем, а не вместе с телефоном */
-.device { transition: none; transform: rotateZ(-2deg); will-change: transform; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .12); }
+/* в покое телефон стоит ровно (transform: none) — так браузер рисует его пиксель в пиксель, без размытия */
+.device { transition: none; transform: none; box-shadow: inset 0 0 0 1.5px rgba(255, 255, 255, .12); }
+.device-wrap.landed { animation: none; opacity: 1; }
 .device-wrap::before {
   content: ""; position: absolute; left: 10%; right: 10%; bottom: 2%; height: 55%;
   border-radius: 60px; box-shadow: 0 50px 90px -30px rgba(20, 28, 14, .55); pointer-events: none;
 }
-/* анимированная сцена внутри телефона — свой слой, остальной телефон не перерисовывается */
-.scene { will-change: transform; transform: translateZ(0); }
+/* ---------- Сцена на экране телефона ----------
+   Картинка (SVG) неподвижна и рисуется один раз. Всё, что движется, — HTML-слои поверх неё,
+   их анимирует видеокарта через transform/opacity. Коробка повторяет пропорции картинки 300×440
+   и «накрывает» экран как object-fit: cover, поэтому слои совпадают с рисунком. */
+.ds-scene { container-type: size; }
+.scene-box {
+  --w: max(100cqw, calc(100cqh * 300 / 440));
+  position: absolute; width: var(--w); height: calc(var(--w) * 440 / 300);
+  left: calc((100cqw - var(--w)) / 2); top: calc((100cqh - var(--w) * 440 / 300) / 2);
+  container-type: size;
+}
+.scene-box > .scene { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sc-sun {
+  position: absolute; left: 82%; top: 6.36%; width: 10.67%; aspect-ratio: 1; border-radius: 50%;
+  background: #f8f3c4; box-shadow: 0 0 14px 4px rgba(255, 245, 190, .8);
+  animation: scSun 6s ease-in-out infinite; transition: scale .6s cubic-bezier(.16, 1, .3, 1);
+}
+@keyframes scSun { 50% { opacity: .78; } }
+.sc-cloud { position: absolute; animation: scDrift 26s linear infinite; }
+.sc-cloud svg { display: block; width: 100%; height: auto; }
+.sc-c1 { left: 55.3%; top: 10.7%; width: 22.7%; opacity: .85; }
+.sc-c2 { left: 21.3%; top: 5.2%; width: 17.3%; opacity: .6; animation-duration: 38s; animation-delay: -14s; }
+@keyframes scDrift { from { transform: translate3d(-47cqw, 0, 0); } to { transform: translate3d(67cqw, 0, 0); } }
+/* бак: тот же прямоугольник, что и на рисунке (x70 y250 160×135, скругление 30) */
+.sc-tank { position: absolute; left: 23.33%; top: 56.82%; width: 53.33%; height: 30.68%; border-radius: 18.75% / 22.2%; overflow: hidden; }
+.sc-tank::before, .sc-tank::after { content: ""; position: absolute; top: 8.9%; bottom: 7%; border-left: 1.5px dashed rgba(244, 245, 241, .55); z-index: 2; }
+.sc-tank::before { left: 33.1%; } .sc-tank::after { left: 66.9%; }
+.sc-water {
+  position: absolute; left: 0; right: 0; top: 29.6%; height: 110%;
+  background: linear-gradient(rgba(219, 251, 110, .55), rgba(143, 191, 58, .35) 60%);
+  transition: transform 1s cubic-bezier(.16, 1, .3, 1);
+}
+.sc-wave {
+  position: absolute; left: 0; bottom: 100%; width: 200%; height: 6px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 6' preserveAspectRatio='none'%3E%3Cpath d='M0 6V3q10-4 20 0t20 0v3z' fill='%23dbfb6e' fill-opacity='.55'/%3E%3C/svg%3E") 0 0 / 20px 6px repeat-x;
+  animation: scWave 3s linear infinite;
+}
+@keyframes scWave { to { transform: translate3d(-50%, 0, 0); } }
+.sc-bub { position: absolute; bottom: 6%; width: 2.2%; aspect-ratio: 1; border-radius: 50%; background: #fff; opacity: 0; animation: scRise 3.2s ease-in infinite; z-index: 1; }
+.sc-bub:nth-of-type(1) { left: 43.8%; width: 3.6%; }
+.sc-bub:nth-of-type(2) { left: 51.2%; animation-delay: .6s; }
+.sc-bub:nth-of-type(3) { left: 56.2%; width: 3.2%; animation-delay: 1.2s; }
+.sc-bub:nth-of-type(4) { left: 47.5%; width: 2%; animation-delay: 1.8s; }
+.sc-bub:nth-of-type(5) { left: 61.2%; width: 2.6%; animation-delay: 2.4s; }
+@keyframes scRise { 0% { transform: translate3d(0, 0, 0); opacity: 0; } 15% { opacity: .9; } 100% { transform: translate3d(0, -18cqh, 0); opacity: 0; } }
+/* бабочка: путь по небу из точек, крылья машут отдельно */
+.sc-bfly { position: absolute; left: 0; top: 0; width: 9.3%; animation: scFly 14s ease-in-out infinite; }
+.sc-wings { display: block; width: 100%; height: auto; animation: scFlap .22s ease-in-out infinite alternate; }
+@keyframes scFly {
+  0%   { transform: translate3d(16cqw, 25cqh, 0); }
+  16%  { transform: translate3d(33cqw, 17cqh, 0); }
+  33%  { transform: translate3d(53cqw, 28cqh, 0); }
+  50%  { transform: translate3d(73cqw, 18cqh, 0); }
+  66%  { transform: translate3d(57cqw, 11cqh, 0); }
+  83%  { transform: translate3d(36cqw, 21cqh, 0); }
+  100% { transform: translate3d(16cqw, 25cqh, 0); }
+}
+@keyframes scFlap { to { transform: scaleX(.2); } }
+/* наведение: вода поднимается, солнце растёт, пузырьки быстрее */
+.hot .sc-water { transform: translate3d(0, -18%, 0); }
+.hot .sc-sun { scale: 1.35; }
+.hot .sc-bub { animation-duration: 1.4s; }
 .ds-card { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(29, 42, 18, .78); }
 .ds-word { mix-blend-mode: normal; }
 .hero .glass { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }

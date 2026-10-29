@@ -46,6 +46,9 @@
 
   /* ---------- Телефон вылетает сразу при открытии ---------- */
   const wrap = $('#deviceWrap');
+  // после посадки снимаем анимацию — телефон становится обычным резким элементом
+  wrap.addEventListener('animationend', e => { if (e.target === wrap) wrap.classList.add('landed'); });
+  setTimeout(() => wrap.classList.add('landed'), 1900);
   requestAnimationFrame(() => {
     wrap.classList.add('launch');
     // телефон «приземляется» — от него расходится волна по траве
@@ -57,13 +60,24 @@
 
   /* ---------- Наклон телефона за мышью и эффект при наведении ---------- */
   const device = $('#device');
-  let tx = 0, ty = 0, cx = 0, cy = 0, tiltRaf = 0;
-  const tilt = () => {
-    cx += (tx - cx) * .1; cy += (ty - cy) * .1;
-    device.style.transform = `rotateY(${cx.toFixed(2)}deg) rotateX(${cy.toFixed(2)}deg) rotateZ(-2deg)`;
-    tiltRaf = Math.abs(tx - cx) + Math.abs(ty - cy) > .02 ? requestAnimationFrame(tilt) : 0;
+  // Наклон плавно догоняет мышь. Когда мышь замерла или курсор на самом телефоне,
+  // телефон возвращается ровно — и в покое стоит без transform, то есть максимально чётко.
+  let tx = 0, ty = 0, cx = 0, cy = 0, tiltRaf = 0, idle = 0, onPhone = false, lastT = 0;
+  const tilt = now => {
+    const k = 1 - Math.pow(.88, Math.min(4, (now - (lastT || now)) / 16.67)); // одинаково при 60 и 144 Гц
+    lastT = now;
+    const gx = onPhone ? 0 : tx, gy = onPhone ? 0 : ty;
+    cx += (gx - cx) * k; cy += (gy - cy) * k;
+    if (Math.abs(gx - cx) + Math.abs(gy - cy) < .015 && gx === 0 && gy === 0) {
+      cx = cy = 0; device.style.transform = ''; tiltRaf = 0; lastT = 0;
+      return;
+    }
+    device.style.transform = `rotateY(${cx.toFixed(3)}deg) rotateX(${cy.toFixed(3)}deg)`;
+    if (Math.abs(gx - cx) + Math.abs(gy - cy) < .015) { tiltRaf = 0; lastT = 0; return; }
+    tiltRaf = requestAnimationFrame(tilt);
   };
   const kick = () => { if (!tiltRaf) tiltRaf = requestAnimationFrame(tilt); };
+  const rest = () => { clearTimeout(idle); idle = setTimeout(() => { tx = ty = 0; kick(); }, 1400); };
   // уход курсора — с маленькой задержкой, чтобы плашки не дёргались на краю телефона
   let hotTimer = 0;
   const setHot = on => {
@@ -73,13 +87,13 @@
   };
   if (matchMedia('(hover: hover)').matches) {
     $('.hero').addEventListener('mousemove', e => {
-      tx = (e.clientX / innerWidth - .5) * 14;
-      ty = -(e.clientY / innerHeight - .5) * 10;
-      kick();
+      tx = (e.clientX / innerWidth - .5) * 12;
+      ty = -(e.clientY / innerHeight - .5) * 8;
+      kick(); rest();
     }, { passive: true });
     $('.hero').addEventListener('mouseleave', () => { tx = ty = 0; kick(); });
-    wrap.addEventListener('mouseenter', () => setHot(true));
-    wrap.addEventListener('mouseleave', () => setHot(false));
+    wrap.addEventListener('mouseenter', () => { onPhone = true; setHot(true); kick(); });
+    wrap.addEventListener('mouseleave', () => { onPhone = false; setHot(false); kick(); });
   } else {
     // на телефоне — по касанию
     wrap.addEventListener('click', e => { if (!e.target.closest('a')) setHot(!wrap.classList.contains('hot')); });
