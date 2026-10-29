@@ -83,9 +83,8 @@
     if (key !== structKey) {
       const first = !structKey;
       structKey = key;
-      // на телефоне кухня во всю ширину, на компьютере — в масштабе комнаты, чтобы была видна длина
-      const vbW = innerWidth < 640 ? st.L + 16 : 500;
-      box.innerHTML = K.svg({ L: st.L, uppers: st.uppers, fridge: st.fridge, handle: st.handle, vbW, anim: first });
+      // масштаб комнаты постоянный: длиннее кухня — шире рисунок, а не крупнее
+      box.innerHTML = K.svg({ L: st.L, uppers: st.uppers, fridge: st.fridge, handle: st.handle, vbW: 500, anim: first });
       svgEl = $('svg', box);
     }
     K.paint(svgEl, st.color, st.top, st.handle);

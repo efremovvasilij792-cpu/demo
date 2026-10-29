@@ -229,8 +229,9 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
 
 /* ---------- футер ---------- */
 .foot{background:var(--ink);color:var(--bg);padding:80px 0 30px;overflow:hidden}
-.foot-word{font-family:var(--serif);font-size:16.5vw;line-height:.9;letter-spacing:-.04em;white-space:nowrap;margin-left:-.04em}
-.foot-word i{color:var(--terra)}
+.foot-word{font-family:var(--serif);font-size:15vw;line-height:1;letter-spacing:-.04em;white-space:nowrap;text-align:center;width:100vw;margin-left:calc(50% - 50vw);padding-bottom:.06em}
+/* курсив выходит за свою рамку справа — даём «ь» место, иначе её обрезает */
+.foot-word i{color:var(--terra);padding-right:.08em}
 .foot-row{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;font-size:13px;opacity:.6;margin-top:40px}
 
 .mbar{display:none}
@@ -263,7 +264,7 @@ input[type=range]::-moz-range-thumb{width:24px;height:24px;border-radius:50%;bac
   /* превью кухни прилипает сверху — видно, как меняется кухня, пока листаешь настройки */
   .hdr.scrolled{background:var(--bg)}
   .cfg-view{position:sticky;top:82px;z-index:5;padding:14px 10px 10px;border-radius:18px}
-  .cfg-canvas{aspect-ratio:16/9.5}
+  .cfg-canvas{aspect-ratio:500/242}
   .cfg-meta{margin-top:8px;padding:6px 10px;gap:10px}
   .plan{width:44px;height:32px}
   .cfg-dims b{font-size:19px}
